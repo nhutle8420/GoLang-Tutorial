@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 type Books []string
@@ -46,4 +48,13 @@ func ReadFile(NameFile string) Books {
 	arry := strings.Split(book, ",")
 	listbook := Books(arry)
 	return listbook
+}
+
+func (b Books) changSttBook() {
+	rand.Seed(time.Now().UnixNano())
+	for index := range b {
+		r := rand.Intn(len(b))
+		b[index], b[r] = b[r], b[index]
+
+	}
 }
