@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
-	"os"
 	"strings"
 	"time"
 )
@@ -18,7 +17,7 @@ func (n Books) in() {
 func createBooks() Books {
 	kq := Books{}
 	chapter := []string{"chapter 1", "Chapter 2"}
-	book := []string{"Conna", "Doaremon"}
+	book := []string{"Conna", "Doaremon", "Lulu"}
 	for _, booki := range book {
 		for _, chapi := range chapter {
 
@@ -38,16 +37,16 @@ func (b Books) SaveFile(NameFile string) error {
 	data := []byte(b.ChangeToString())
 	return ioutil.WriteFile(NameFile, data, 0666)
 }
-func ReadFile(NameFile string) Books {
+func ReadFile(NameFile string) (Books, error) {
 	data, err := ioutil.ReadFile(NameFile)
 	if err != nil {
 		log.Printf("Erro: %v", err)
-		os.Exit(1)
+		return Books{}, err
 	}
 	book := string(data)
 	arry := strings.Split(book, ",")
 	listbook := Books(arry)
-	return listbook
+	return listbook, nil
 }
 
 func (b Books) changSttBook() {
