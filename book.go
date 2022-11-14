@@ -1,6 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"math/rand"
+	"os"
+	"strings"
+	"time"
+)
 
 type Books []string
 
@@ -9,8 +17,8 @@ func (n Books) in() {
 }
 func createBooks() Books {
 	kq := Books{}
-	chapter := []string{"chapter 1", "Chapter 2", "chapter 3", "chapter 4", "chapter 5"}
-	book := []string{"Conna", "Pokeomon", "Onepice", "Doaremon"}
+	chapter := []string{"chapter 1", "Chapter 2"}
+	book := []string{"Conna", "Doaremon"}
 	for _, booki := range book {
 		for _, chapi := range chapter {
 
@@ -22,4 +30,31 @@ func createBooks() Books {
 }
 func inventory(n Books, Sl int) (Books, Books) {
 	return n[:Sl], n[Sl:]
+}
+func (b Books) ChangeToString() string {
+	return strings.Join(b, ",")
+}
+func (b Books) SaveFile(NameFile string) error {
+	data := []byte(b.ChangeToString())
+	return ioutil.WriteFile(NameFile, data, 0666)
+}
+func ReadFile(NameFile string) Books {
+	data, err := ioutil.ReadFile(NameFile)
+	if err != nil {
+		log.Printf("Erro: %v", err)
+		os.Exit(1)
+	}
+	book := string(data)
+	arry := strings.Split(book, ",")
+	listbook := Books(arry)
+	return listbook
+}
+
+func (b Books) changSttBook() {
+	rand.Seed(time.Now().UnixNano())
+	for index := range b {
+		r := rand.Intn(len(b))
+		b[index], b[r] = b[r], b[index]
+
+	}
 }
